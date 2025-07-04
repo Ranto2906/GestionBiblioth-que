@@ -1,3 +1,4 @@
+-- Active: 1751649895095@@127.0.0.1@5432@gestion_bibliotheque@public
 -- Script PostgreSQL amélioré pour la bibliothèque de livres
 -- Basé sur l'analyse métier complète
 
@@ -433,6 +434,15 @@ INSERT INTO langue (code_langue, nom_langue) VALUES
 ('ES', 'Espagnol'),
 ('DE', 'Allemand'),
 ('IT', 'Italien');
+
+INSERT INTO adherent (nom, prenom, email, id_type_utilisateur, date_inscription, date_expiration_adhesion, statut, preferences_notification, actif, created_at, updated_at) 
+VALUES 
+-- Étudiants
+('Dupont', 'Marie', 'marie.dupont@email.com', (SELECT id_type_utilisateur FROM type_utilisateur WHERE code_type = 'ETUDIANT'), '2024-01-15', '2025-01-15', 'ACTIF', '{"email": true, "sms": false}', true, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+('Martin', 'Pierre', 'pierre.martin@email.com', (SELECT id_type_utilisateur FROM type_utilisateur WHERE code_type = 'ETUDIANT'), '2024-02-20', '2025-02-20', 'ACTIF', '{"email": true, "sms": true}', true, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+('Bernard', 'Sophie', 'sophie.bernard@email.com', (SELECT id_type_utilisateur FROM type_utilisateur WHERE code_type = 'ETUDIANT'), '2024-03-10', '2025-03-10', 'ACTIF', '{"email": false, "sms": true}', true, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+('Petit', 'Lucas', 'lucas.petit@email.com', (SELECT id_type_utilisateur FROM type_utilisateur WHERE code_type = 'ETUDIANT'), '2024-01-05', '2025-01-05', 'SUSPENDU', '{"email": true, "sms": false}', true, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+
 
 INSERT INTO genre (nom_genre, description) VALUES
 ('Fiction', 'Romans, nouvelles, littérature'),
