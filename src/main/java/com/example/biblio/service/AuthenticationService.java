@@ -32,8 +32,7 @@ public class AuthenticationService {
                 Utilisateur utilisateur = adherent.getUtilisateur();
                 
                 // Vérifie les credentials
-                if (utilisateur.getUsername().equals(email) && 
-                    utilisateur.getPassword().equals(password) && 
+                if (utilisateur.getPassword().equals(password) && 
                     utilisateur.getActif()) {
                     return Optional.of(adherent);
                 }

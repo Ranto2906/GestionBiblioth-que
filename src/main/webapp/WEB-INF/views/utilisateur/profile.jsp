@@ -315,7 +315,7 @@
                     <div class="info-group">
                         <div class="info-label">Rôle</div>
                         <div class="info-value">
-                            <span class="role-badge role-${utilisateur.role.toLowerCase()}">${utilisateur.role}</span>
+                            <span class="role-badge role-${utilisateur.role.name().toLowerCase()}">${utilisateur.role}</span>
                         </div>
                     </div>
                     
@@ -326,7 +326,7 @@
                     
                     <div class="info-group">
                         <div class="info-label">Date de création</div>
-                        <div class="info-value">${utilisateur.dateCreation}</div>
+                        <div class="info-value">${utilisateur.createdAt}</div>
                     </div>
                     
                     <div class="info-group">
@@ -344,7 +344,16 @@
                     </div>
                 </div>
                 
-                <% if (utilisateur.role == 'ADMIN') { %>
+                <% 
+                Object userRoleObj = session.getAttribute("userRole");
+                String userRole = null;
+                if (userRoleObj instanceof String) {
+                    userRole = (String) userRoleObj;
+                } else if (userRoleObj != null) {
+                    userRole = userRoleObj.toString();
+                }
+                if (userRole != null && "ADMIN".equals(userRole)) { 
+                %>
                 <div class="admin-section">
                     <h3 class="admin-title">🔧 Permissions Administrateur</h3>
                     <p>En tant qu'administrateur, vous avez accès à toutes les fonctionnalités du système :</p>

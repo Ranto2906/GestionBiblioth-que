@@ -260,7 +260,7 @@
 <body>
     <div class="header">
         <div class="header-content">
-            <h1>🏛️ Bibliothèque - Espace Personnel</h1>
+            <h1> Bibliotheque - Espace Personnel</h1>
             <div class="user-info">
                 <div class="user-avatar">
                     ${utilisateur.nom.charAt(0)}
@@ -277,22 +277,31 @@
     <div class="container">
         <div class="welcome-section">
             <h2 class="welcome-title">Bienvenue, ${utilisateur.nom} !</h2>
-            <p>Vous êtes connecté en tant que <strong>${utilisateur.role}</strong>. Dernière connexion: ${utilisateur.derniereConnexion}</p>
+            <p>Vous etes connecte en tant que <strong>${utilisateur.role}</strong>. Derniere connexion: ${utilisateur.derniereConnexion}</p>
         </div>
         
         <div class="nav-menu">
             <a href="#" class="nav-item active">Dashboard</a>
             <a href="/utilisateur/emprunts" class="nav-item">Gestion Emprunts</a>
-            <a href="/utilisateur/reservations" class="nav-item">Gestion Réservations</a>
-            <a href="/utilisateur/adherents" class="nav-item">Gestion Adhérents</a>
+            <a href="/utilisateur/reservations" class="nav-item">Gestion Reservations</a>
+            <a href="/utilisateur/adherents" class="nav-item">Gestion Adherents</a>
             <a href="/utilisateur/catalogue" class="nav-item">Catalogue</a>
             <a href="/utilisateur/profile" class="nav-item">Mon Profil</a>
         </div>
         
-        <% if (utilisateur.role == 'ADMIN') { %>
+        <% 
+        Object userRoleObj = session.getAttribute("userRole");
+        String userRole = null;
+        if (userRoleObj instanceof String) {
+            userRole = (String) userRoleObj;
+        } else if (userRoleObj != null) {
+            userRole = userRoleObj.toString();
+        }
+        if (userRole != null && "ADMIN".equals(userRole)) { 
+        %>
         <div class="admin-section">
-            <h3 class="admin-title">🔧 Section Administrateur</h3>
-            <p>Vous avez accès aux fonctionnalités d'administration de la bibliothèque.</p>
+            <h3 class="admin-title"> Section Administrateur</h3>
+            <p>Vous avez acces aux fonctionnalites d'administration de la bibliotheque.</p>
         </div>
         <% } %>
         
@@ -311,43 +320,45 @@
             </div>
             <div class="stat-card">
                 <div class="stat-number">156</div>
-                <div class="stat-label">Adhérents actifs</div>
+                <div class="stat-label">Adherents actifs</div>
             </div>
         </div>
         
         <div class="actions-grid">
             <a href="/utilisateur/emprunt/nouveau" class="action-btn">
-                <div class="action-icon">📚</div>
+                <div class="action-icon"></div>
                 <div>Nouvel emprunt</div>
             </a>
             <a href="/utilisateur/retour" class="action-btn">
-                <div class="action-icon">📖</div>
+                <div class="action-icon"></div>
                 <div>Retour de livre</div>
             </a>
             <a href="/utilisateur/adherent/nouveau" class="action-btn">
-                <div class="action-icon">👤</div>
-                <div>Nouvel adhérent</div>
+                <div class="action-icon"></div>
+                <div>Nouvel adherent</div>
             </a>
             <a href="/utilisateur/recherche" class="action-btn">
-                <div class="action-icon">🔍</div>
+                <div class="action-icon"></div>
                 <div>Recherche</div>
             </a>
             
-            <% if (utilisateur.role == 'ADMIN') { %>
+            <% 
+            if (userRole != null && "ADMIN".equals(userRole)) { 
+            %>
             <a href="/utilisateur/admin/livres" class="action-btn admin">
-                <div class="action-icon">📚</div>
+                <div class="action-icon"></div>
                 <div>Gestion Livres</div>
             </a>
             <a href="/utilisateur/admin/statistiques" class="action-btn admin">
-                <div class="action-icon">📊</div>
+                <div class="action-icon"></div>
                 <div>Statistiques</div>
             </a>
             <a href="/utilisateur/admin/utilisateurs" class="action-btn admin">
-                <div class="action-icon">👥</div>
+                <div class="action-icon"></div>
                 <div>Gestion Utilisateurs</div>
             </a>
             <a href="/utilisateur/admin/parametres" class="action-btn admin">
-                <div class="action-icon">⚙️</div>
+                <div class="action-icon"></div>
                 <div>Paramètres</div>
             </a>
             <% } %>
@@ -367,19 +378,19 @@
                     <div class="activity-title">Retour : Pierre Martin - "1984"</div>
                     <div class="activity-date">Retourné le 1er juillet 2024</div>
                 </div>
-                <span class="activity-status status-active">Terminé</span>
+                <span class="activity-status status-active">Termine</span>
             </div>
             <div class="activity-item">
                 <div class="activity-info">
                     <div class="activity-title">Nouvel adhérent : Sophie Bernard</div>
                     <div class="activity-date">Inscrit le 30 juin 2024</div>
                 </div>
-                <span class="activity-status status-active">Terminé</span>
+                <span class="activity-status status-active">Termine</span>
             </div>
             <div class="activity-item">
                 <div class="activity-info">
                     <div class="activity-title">Retard : Jean Dubois - "Harry Potter"</div>
-                    <div class="activity-date">Retour prévu le 25 juin 2024</div>
+                    <div class="activity-date">Retour prevu le 25 juin 2024</div>
                 </div>
                 <span class="activity-status status-overdue">En retard</span>
             </div>
