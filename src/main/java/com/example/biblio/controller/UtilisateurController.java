@@ -8,6 +8,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -19,6 +20,14 @@ public class UtilisateurController {
     
     @Autowired
     private UtilisateurService utilisateurService;
+    
+    /**
+     * Affichage de la page de connexion utilisateur (GET)
+     */
+    @RequestMapping(value = "/login", method = RequestMethod.GET)
+    public String showLoginForm() {
+        return "login-utilisateur";
+    }
     
     /**
      * Traitement de la connexion utilisateur (POST)
@@ -42,7 +51,7 @@ public class UtilisateurController {
                 session.setAttribute("userType", "utilisateur");
                 session.setAttribute("userId", utilisateur.getIdUtilisateur());
                 session.setAttribute("userName", utilisateur.getNom());
-                session.setAttribute("userRole", utilisateur.getRole());
+                session.setAttribute("userRole", utilisateur.getRole().name());
                 
                 // Redirection vers le dashboard utilisateur
                 return "redirect:/utilisateur/dashboard";
@@ -120,5 +129,108 @@ public class UtilisateurController {
         }
         
         return "utilisateur/gestion-adherents";
+    }
+    
+    /**
+     * Gestion des emprunts
+     */
+    @RequestMapping("/emprunts")
+    public String gestionEmprunts(HttpSession session, Model model) {
+        Utilisateur utilisateur = (Utilisateur) session.getAttribute("utilisateur");
+        if (utilisateur == null) {
+            return "redirect:/login-utilisateur";
+        }
+        
+        // TODO: Récupérer tous les emprunts
+        // List<Pret> emprunts = pretService.findAll();
+        // model.addAttribute("emprunts", emprunts);
+        
+        return "utilisateur/gestion-emprunts";
+    }
+    
+    /**
+     * Gestion des réservations
+     */
+    @RequestMapping("/reservations")
+    public String gestionReservations(HttpSession session, Model model) {
+        Utilisateur utilisateur = (Utilisateur) session.getAttribute("utilisateur");
+        if (utilisateur == null) {
+            return "redirect:/login-utilisateur";
+        }
+        
+        // TODO: Récupérer toutes les réservations
+        // List<Reservation> reservations = reservationService.findAll();
+        // model.addAttribute("reservations", reservations);
+        
+        return "utilisateur/gestion-reservations";
+    }
+    
+    /**
+     * Catalogue des livres
+     */
+    @RequestMapping("/catalogue")
+    public String catalogue(HttpSession session, Model model) {
+        Utilisateur utilisateur = (Utilisateur) session.getAttribute("utilisateur");
+        if (utilisateur == null) {
+            return "redirect:/login-utilisateur";
+        }
+        
+        // TODO: Récupérer le catalogue des livres
+        // List<Livre> livres = livreService.findAll();
+        // model.addAttribute("livres", livres);
+        
+        return "utilisateur/catalogue";
+    }
+    
+    /**
+     * Nouvel emprunt
+     */
+    @RequestMapping("/emprunt/nouveau")
+    public String nouvelEmprunt(HttpSession session, Model model) {
+        Utilisateur utilisateur = (Utilisateur) session.getAttribute("utilisateur");
+        if (utilisateur == null) {
+            return "redirect:/login-utilisateur";
+        }
+        
+        return "utilisateur/nouvel-emprunt";
+    }
+    
+    /**
+     * Retour de livre
+     */
+    @RequestMapping("/retour")
+    public String retourLivre(HttpSession session, Model model) {
+        Utilisateur utilisateur = (Utilisateur) session.getAttribute("utilisateur");
+        if (utilisateur == null) {
+            return "redirect:/login-utilisateur";
+        }
+        
+        return "utilisateur/retour-livre";
+    }
+    
+    /**
+     * Nouvel adhérent
+     */
+    @RequestMapping("/adherent/nouveau")
+    public String nouvelAdherent(HttpSession session, Model model) {
+        Utilisateur utilisateur = (Utilisateur) session.getAttribute("utilisateur");
+        if (utilisateur == null) {
+            return "redirect:/login-utilisateur";
+        }
+        
+        return "utilisateur/nouvel-adherent";
+    }
+    
+    /**
+     * Recherche
+     */
+    @RequestMapping("/recherche")
+    public String recherche(HttpSession session, Model model) {
+        Utilisateur utilisateur = (Utilisateur) session.getAttribute("utilisateur");
+        if (utilisateur == null) {
+            return "redirect:/login-utilisateur";
+        }
+        
+        return "utilisateur/recherche";
     }
 } 

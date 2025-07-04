@@ -137,7 +137,7 @@
             </div>
         <% } %>
         
-        <form action="/login-utilisateur" method="post">
+        <form action="/utilisateur/login" method="post">
             <div class="form-group">
                 <label for="username">Nom d'utilisateur :</label>
                 <input type="text" id="username" name="username" required 

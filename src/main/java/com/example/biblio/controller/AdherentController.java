@@ -9,6 +9,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -23,6 +24,14 @@ public class AdherentController {
     
     @Autowired
     private AuthenticationService authenticationService;
+    
+    /**
+     * Affichage de la page de connexion adhérent (GET)
+     */
+    @RequestMapping(value = "/login", method = RequestMethod.GET)
+    public String showLoginForm() {
+        return "login-adherent";
+    }
     
     /**
      * Traitement de la connexion adhérent (POST)
@@ -104,5 +113,74 @@ public class AdherentController {
         }
         
         return "adherent/profile";
+    }
+    
+    /**
+     * Emprunts de l'adhérent
+     */
+    @RequestMapping("/emprunts")
+    public String emprunts(HttpSession session, Model model) {
+        Adherent adherent = (Adherent) session.getAttribute("adherent");
+        if (adherent == null) {
+            return "redirect:/login-adherent";
+        }
+        
+        // Récupération des données à jour
+        Optional<Adherent> adherentOpt = adherentService.findById(adherent.getIdAdherent());
+        if (adherentOpt.isPresent()) {
+            model.addAttribute("adherent", adherentOpt.get());
+        }
+        
+        // TODO: Récupérer les emprunts de l'adhérent
+        // List<Pret> emprunts = pretService.findByAdherent(adherent.getIdAdherent());
+        // model.addAttribute("emprunts", emprunts);
+        
+        return "adherent/emprunts";
+    }
+    
+    /**
+     * Réservations de l'adhérent
+     */
+    @RequestMapping("/reservations")
+    public String reservations(HttpSession session, Model model) {
+        Adherent adherent = (Adherent) session.getAttribute("adherent");
+        if (adherent == null) {
+            return "redirect:/login-adherent";
+        }
+        
+        // Récupération des données à jour
+        Optional<Adherent> adherentOpt = adherentService.findById(adherent.getIdAdherent());
+        if (adherentOpt.isPresent()) {
+            model.addAttribute("adherent", adherentOpt.get());
+        }
+        
+        // TODO: Récupérer les réservations de l'adhérent
+        // List<Reservation> reservations = reservationService.findByAdherent(adherent.getIdAdherent());
+        // model.addAttribute("reservations", reservations);
+        
+        return "adherent/reservations";
+    }
+    
+    /**
+     * Catalogue des livres
+     */
+    @RequestMapping("/catalogue")
+    public String catalogue(HttpSession session, Model model) {
+        Adherent adherent = (Adherent) session.getAttribute("adherent");
+        if (adherent == null) {
+            return "redirect:/login-adherent";
+        }
+        
+        // Récupération des données à jour
+        Optional<Adherent> adherentOpt = adherentService.findById(adherent.getIdAdherent());
+        if (adherentOpt.isPresent()) {
+            model.addAttribute("adherent", adherentOpt.get());
+        }
+        
+        // TODO: Récupérer le catalogue des livres
+        // List<Livre> livres = livreService.findAll();
+        // model.addAttribute("livres", livres);
+        
+        return "adherent/catalogue";
     }
 } 

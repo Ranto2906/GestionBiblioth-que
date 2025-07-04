@@ -88,10 +88,10 @@
         </p>
         
         <div class="login-buttons">
-            <a href="/login-adherent" class="login-btn btn-adherent">
+            <a href="/adherent/login" class="login-btn btn-adherent">
                  Connexion Adherent
             </a>
-            <a href="/login-utilisateur" class="login-btn btn-utilisateur">
+            <a href="/utilisateur/login" class="login-btn btn-utilisateur">
                  Connexion Utilisateur
             </a>
         </div>
