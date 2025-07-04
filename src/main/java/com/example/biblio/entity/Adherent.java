@@ -24,7 +24,10 @@ public class Adherent {
     @Column(name = "email", nullable = false, unique = true, length = 100)
     private String email;
     
-    @ManyToOne(fetch = FetchType.LAZY)
+    @Column(name = "password", nullable = false, length = 255)
+    private String password;
+    
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "id_type_utilisateur", nullable = false)
     private TypeUtilisateur typeUtilisateur;
     
@@ -73,11 +76,12 @@ public class Adherent {
         this.dateInscription = LocalDate.now();
     }
     
-    public Adherent(String nom, String prenom, String email, TypeUtilisateur typeUtilisateur) {
+    public Adherent(String nom, String prenom, String email, String password, TypeUtilisateur typeUtilisateur) {
         this();
         this.nom = nom;
         this.prenom = prenom;
         this.email = email;
+        this.password = password;
         this.typeUtilisateur = typeUtilisateur;
     }
     
@@ -112,6 +116,14 @@ public class Adherent {
     
     public void setEmail(String email) {
         this.email = email;
+    }
+    
+    public String getPassword() {
+        return password;
+    }
+    
+    public void setPassword(String password) {
+        this.password = password;
     }
     
     public TypeUtilisateur getTypeUtilisateur() {

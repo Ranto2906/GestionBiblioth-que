@@ -18,7 +18,7 @@ public class AuthenticationService {
     
     /**
      * Authentifie un adhérent avec email et mot de passe
-     * L'authentification se fait via l'entité Utilisateur liée à l'Adherent
+     * L'authentification se fait directement sur l'entité Adherent
      */
     public Optional<Adherent> authenticateAdherent(String email, String password) {
         // Trouve d'abord l'adhérent par email
@@ -27,15 +27,10 @@ public class AuthenticationService {
         if (adherentOpt.isPresent()) {
             Adherent adherent = adherentOpt.get();
             
-            // Vérifie si l'adhérent a un compte utilisateur associé
-            if (adherent.getUtilisateur() != null) {
-                Utilisateur utilisateur = adherent.getUtilisateur();
-                
-                // Vérifie les credentials
-                if (utilisateur.getPassword().equals(password) && 
-                    utilisateur.getActif()) {
-                    return Optional.of(adherent);
-                }
+            // Vérifie le mot de passe directement dans l'adhérent
+            if (adherent.getPassword().equals(password) && 
+                adherent.getStatut().equals(com.example.biblio.entity.enums.AdherentStatut.ACTIF)) {
+                return Optional.of(adherent);
             }
         }
         
