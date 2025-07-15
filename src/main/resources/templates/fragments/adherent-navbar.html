@@ -1,66 +1,54 @@
-<nav class="navbar navbar-expand-lg navbar-light fixed-top" th:fragment="adherent-navbar">
-    <div class="container">
-        <a class="navbar-brand fw-bold" href="/adherent/home">
-            <i class="fas fa-book-open me-2"></i>Bibliothèque
+<!-- Sidebar moderne adhérent -->
+<aside class="d-flex flex-column flex-shrink-0 p-3 bg-white border-end min-vh-100 position-fixed" style="width: 250px; z-index: 1040;" th:fragment="adherent-navbar">
+    <a href="/adherent/home" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-decoration-none">
+        <span class="fs-4 fw-bold text-primary"><i class="fas fa-book-open me-2"></i>Bibliothèque</span>
+    </a>
+    <hr>
+    <ul class="nav nav-pills flex-column mb-auto">
+        <li class="nav-item">
+            <a href="/adherent/home" class="nav-link d-flex align-items-center" th:classappend="${activePage} == 'home' ? 'active' : 'text-dark'">
+                <i class="fas fa-home me-2"></i>Accueil
+            </a>
+        </li>
+        <li>
+            <a href="/adherent/livres" class="nav-link d-flex align-items-center" th:classappend="${activePage} == 'livres' ? 'active' : 'text-dark'">
+                <i class="fas fa-book me-2"></i>Livres
+            </a>
+        </li>
+        <li>
+            <a href="/adherent/prets" class="nav-link d-flex align-items-center" th:classappend="${activePage} == 'prets' ? 'active' : 'text-dark'">
+                <i class="fas fa-hand-holding-medical me-2"></i>Mes prêts
+            </a>
+        </li>
+        <li>
+            <a href="/adherent/notifications" class="nav-link d-flex align-items-center position-relative" th:classappend="${activePage} == 'notifications' ? 'active' : 'text-dark'">
+                <i class="fas fa-bell me-2"></i>Notifications
+                <span th:if="${notificationsNonLues > 0}"
+                      class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger ms-2"
+                      th:text="${notificationsNonLues}">0</span>
+            </a>
+        </li>
+        <li>
+            <a href="/adherent/abonnement" class="nav-link d-flex align-items-center text-dark">
+                <i class="fas fa-id-card me-2"></i>Abonnement
+            </a>
+        </li>
+        <li>
+            <a href="/adherent/profile" class="nav-link d-flex align-items-center" th:classappend="${activePage} == 'profile' ? 'active' : 'text-dark'">
+                <i class="fas fa-user me-2"></i>Mon Profil
+            </a>
+        </li>
+    </ul>
+    <hr>
+    <div class="dropdown mt-auto">
+        <a href="#" class="d-flex align-items-center text-decoration-none dropdown-toggle" id="dropdownUser" data-bs-toggle="dropdown" aria-expanded="false">
+            <i class="fas fa-user-circle me-2 fs-5"></i>
+            <strong th:text="${user.prenom + ' ' + user.nom}">Utilisateur</strong>
         </a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav me-auto">
-                <li class="nav-item">
-                    <a class="nav-link" th:classappend="${activePage} == 'home' ? 'active'" href="/adherent/home">
-                        <i class="fas fa-home me-1"></i>Accueil
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" th:classappend="${activePage} == 'livres' ? 'active'" href="/adherent/livres">
-                        <i class="fas fa-book me-1"></i>Livres
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" th:classappend="${activePage} == 'prets' ? 'active'" href="/adherent/prets">
-                        <i class="fas fa-hand-holding-medical me-1"></i>Mes prêts
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link position-relative" th:classappend="${activePage} == 'notifications' ? 'active'" href="/adherent/notifications">
-                        <i class="fas fa-bell me-1"></i>Notifications
-                        <span th:if="${notificationsNonLues > 0}"
-                              class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
-                              th:text="${notificationsNonLues}">
-                            0
-                        </span>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link position-relative" href="/adherent/abonnement">
-                        <i class="fas fa-id-card me-1"></i>Abonnement
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" th:classappend="${activePage} == 'profile' ? 'active'" href="/adherent/profile">
-                        <i class="fas fa-user me-1"></i>Mon Profil
-                    </a>
-                </li>
-            </ul>
-            <div class="navbar-nav">
-                <div class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown">
-                        <i class="fas fa-user-circle me-1"></i>
-                        <span th:text="${user.prenom + ' ' + user.nom}">Utilisateur</span>
-                    </a>
-                    <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="/adherent/profile">
-                            <i class="fas fa-user me-2"></i>Mon Profil
-                        </a></li>
-                        <li><hr class="dropdown-divider"></li>
-                        <li><a class="dropdown-item" href="/logout">
-                            <i class="fas fa-sign-out-alt me-2"></i>Déconnexion
-                        </a></li>
-                    </ul>
-                </div>
-            </div>
-        </div>
+        <ul class="dropdown-menu dropdown-menu-end shadow" aria-labelledby="dropdownUser">
+            <li><a class="dropdown-item" href="/adherent/profile"><i class="fas fa-user me-2"></i>Mon Profil</a></li>
+            <li><hr class="dropdown-divider"></li>
+            <li><a class="dropdown-item" href="/logout"><i class="fas fa-sign-out-alt me-2"></i>Déconnexion</a></li>
+        </ul>
     </div>
-</nav> 
+</aside> 

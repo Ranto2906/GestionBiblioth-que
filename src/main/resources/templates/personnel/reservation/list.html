@@ -1,49 +1,44 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Réservations Actives - Personnel</title>
     <!-- CSS (Bootstrap + Font Awesome) -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" th:href="@{/css/personnel.css}">
+    <!-- Suppression de l'ancien CSS personnalisé -->
 </head>
 <body>
+    <div th:replace="~{fragments/personnel-sidebar :: personnel-sidebar(activePage='reservation', user=${user})}"></div>
     <div class="container-fluid">
         <div class="row">
-            <!-- Sidebar -->
-            <div class="col-md-3 col-lg-2 p-0">
-               <div th:insert="~{fragments/personnel-sidebar :: personnel-sidebar}"></div>
-            </div>
-            
-            <!-- Contenu principal -->
-            <div class="col-md-9 col-lg-10 main-content">
-                <!-- Header -->
-                <div class="simple-header fade-in">
-                    <div class="logo">
+            <div class="col-12 col-lg-10 offset-lg-2 px-4" style="min-height:100vh;">
+                <!-- Header visuel moderne -->
+                <header class="d-flex align-items-center gap-3 py-4 mb-4 border-bottom bg-white rounded-4 shadow-sm mt-3">
+                    <div class="bg-primary text-white rounded-circle d-flex align-items-center justify-content-center" style="width:56px;height:56px;font-size:1.7rem;">
                         <i class="fas fa-bookmark"></i>
                     </div>
                     <div>
-                        <h1>Réservations Actives</h1>
-                        <p class="mb-0">Gestion des réservations en attente</p>
+                        <h2 class="fw-bold mb-1">Réservations Actives</h2>
+                        <p class="text-muted mb-0">Gestion des réservations en attente</p>
+                    </div>
+                </header>
+                <!-- Alertes -->
+                <div class="my-4">
+                    <div th:if="${success}" class="alert alert-success alert-dismissible fade show" role="alert">
+                        <i class="fas fa-check-circle me-2"></i>
+                        <span th:text="${success}"></span>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                    </div>
+                    <div th:if="${error}" class="alert alert-danger alert-dismissible fade show" role="alert">
+                        <i class="fas fa-exclamation-triangle me-2"></i>
+                        <span th:text="${error}"></span>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
                     </div>
                 </div>
-
-                <!-- Alertes -->
-                <div th:if="${success}" class="alert alert-success alert-dismissible fade show" role="alert">
-                    <i class="fas fa-check-circle me-2"></i>
-                    <span th:text="${success}"></span>
-                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-                </div>
-                
-                <div th:if="${error}" class="alert alert-danger alert-dismissible fade show" role="alert">
-                    <i class="fas fa-exclamation-triangle me-2"></i>
-                    <span th:text="${error}"></span>
-                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-                </div>
-
-                <!-- Contenu principal -->
-                <div class="content-wrapper fade-in">
-                    <!-- Statistiques -->
+                <!-- Card et tableau modernisé -->
+                <div class="card shadow-sm border-0 p-4 mb-4">
                     <div class="row mb-4">
                         <div class="col-md-4">
                             <div class="card border-0 shadow-sm">
@@ -52,13 +47,11 @@
                                         <i class="fas fa-clock text-white fs-4"></i>
                                     </div>
                                     <h5 class="card-title">Réservations en attente</h5>
-                                    <p class="card-text text-muted" th:text="${reservations.size()} + ' réservation(s)'">0 réservation(s)</p>
+                                    <p class="card-text text-muted" th:text="${reservations.size()} + ' réservation(s)'"></p>
                                 </div>
                             </div>
                         </div>
                     </div>
-
-                    <!-- Liste des réservations -->
                     <div class="card border-0 shadow-sm">
                         <div class="card-header bg-primary text-white">
                             <h5 class="mb-0">
@@ -66,15 +59,14 @@
                             </h5>
                         </div>
                         <div class="card-body p-0">
-                            <div th:if="${reservations.isEmpty()}" class="empty-state">
-                                <i class="fas fa-inbox"></i>
+                            <div th:if="${reservations.isEmpty()}" class="text-center py-5">
+                                <i class="fas fa-inbox fa-3x text-muted mb-3"></i>
                                 <h4>Aucune réservation active</h4>
                                 <p class="text-muted">Il n'y a actuellement aucune réservation en attente de validation.</p>
                             </div>
-                            
                             <div th:if="${!reservations.isEmpty()}" class="table-responsive">
-                                <table class="table table-hover mb-0">
-                                    <thead>
+                                <table class="table table-hover align-middle mb-0">
+                                    <thead class="table-light">
                                         <tr>
                                             <th>Adhérent</th>
                                             <th>Livre</th>
@@ -93,42 +85,32 @@
                                                         <i class="fas fa-user"></i>
                                                     </div>
                                                     <div>
-                                                        <strong th:text="${reservation.adherent.prenom + ' ' + reservation.adherent.nom}">
-                                                            Nom Adhérent
-                                                        </strong>
+                                                        <strong th:text="${reservation.adherent.prenom + ' ' + reservation.adherent.nom}"></strong>
                                                         <br>
-                                                        <small class="text-muted" th:text="${reservation.adherent.numeroAdherent}">
-                                                            Numéro
-                                                        </small>
+                                                        <small class="text-muted" th:text="${reservation.adherent.numeroAdherent}"></small>
                                                     </div>
                                                 </div>
                                             </td>
                                             <td>
                                                 <div>
-                                                    <strong th:text="${reservation.exemplaire.livre.titre}">Titre du livre</strong>
+                                                    <strong th:text="${reservation.exemplaire.livre.titre}"></strong>
                                                     <br>
                                                     <small class="text-muted" th:if="${reservation.exemplaire.livre.auteur != null}">
-                                                        <span th:text="${reservation.exemplaire.livre.auteur.nom + ' ' + reservation.exemplaire.livre.auteur.prenom}">Auteur</span>
+                                                        <span th:text="${reservation.exemplaire.livre.auteur.nom + ' ' + reservation.exemplaire.livre.auteur.prenom}"></span>
                                                     </small>
                                                 </div>
                                             </td>
                                             <td>
-                                                <span class="badge bg-secondary" th:text="${reservation.exemplaire.reference}">Référence</span>
+                                                <span class="badge bg-secondary" th:text="${reservation.exemplaire.reference}"></span>
                                             </td>
                                             <td>
-                                                <span th:text="${#temporals.format(reservation.dateReservation, 'dd/MM/yyyy HH:mm')}">
-                                                    Date réservation
-                                                </span>
+                                                <span th:text="${#temporals.format(reservation.dateReservation, 'dd/MM/yyyy HH:mm')}"></span>
                                             </td>
                                             <td>
-                                                <span th:text="${#temporals.format(reservation.dateSouhaiter, 'dd/MM/yyyy HH:mm')}">
-                                                    Date souhaitée
-                                                </span>
+                                                <span th:text="${#temporals.format(reservation.dateSouhaiter, 'dd/MM/yyyy HH:mm')}"></span>
                                             </td>
                                             <td>
-                                                <span th:text="${#temporals.format(reservation.dateExpiration, 'dd/MM/yyyy HH:mm')}">
-                                                    Date expiration
-                                                </span>
+                                                <span th:text="${#temporals.format(reservation.dateExpiration, 'dd/MM/yyyy HH:mm')}"></span>
                                             </td>
                                             <td>
                                                 <div class="btn-group" role="group">
@@ -154,15 +136,12 @@
             </div>
         </div>
     </div>
-
     <!-- JS Bootstrap -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    
     <!-- Script pour les actions -->
     <script>
         function validerReservation(button) {
             const reservationId = button.getAttribute('data-reservation-id');
-            
             if (confirm('Êtes-vous sûr de vouloir valider cette réservation ?')) {
                 fetch(`/personnel/reservation/valider/${reservationId}`, {
                     method: 'POST',
@@ -183,10 +162,8 @@
                 });
             }
         }
-        
         function annulerReservation(button) {
             const reservationId = button.getAttribute('data-reservation-id');
-            
             if (confirm('Êtes-vous sûr de vouloir annuler cette réservation ?')) {
                 fetch(`/personnel/reservation/annuler/${reservationId}`, {
                     method: 'POST',
@@ -198,7 +175,6 @@
                 .then(result => {
                     alert(result);
                     if (result.includes('succès')) {
-                        // Recharger la page pour mettre à jour la liste
                         location.reload();
                     }
                 })
