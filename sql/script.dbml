@@ -1,0 +1,258 @@
+// Définition des tables
+Table utilisateur {
+  id bigint [primary key]
+  address varchar(255)
+  date_naissance date
+  email varchar(255)
+  nom varchar(255)
+  password varchar(255)
+  prenom varchar(255)
+  telephone varchar(255)
+}
+
+Table profil {
+  id bigint [primary key]
+  nom varchar(255)
+}
+
+Table adherent {
+  id bigint [primary key]
+  date_inscription timestamp
+  numero_adherent varchar(255) [not null, unique]
+  profil_id bigint
+}
+
+Table personnel {
+  id bigint [primary key]
+  date_embauche timestamp
+  matricule varchar(255) [not null, unique]
+  status varchar(255)
+}
+
+Table auteur {
+  id bigint [primary key]
+  date_deces date
+  date_naissance date
+  nationalite varchar(255)
+  nom varchar(255)
+  prenom varchar(255)
+}
+
+Table editeur {
+  id bigint [primary key]
+  annee_fondation integer
+  nom varchar(255)
+  pays varchar(255)
+}
+
+Table categorie {
+  id bigint [primary key]
+  nom varchar(255)
+}
+
+Table livre {
+  id bigint [primary key]
+  annee_publication integer
+  isbn varchar(255)
+  limit_age integer
+  nombre_pages integer
+  resume varchar(255)
+  titre varchar(255)
+  auteur_id bigint
+  editeur_id bigint
+}
+
+Table livre_categorie {
+  livre_id bigint [not null]
+  categorie_id bigint [not null]
+  Indexes {
+    (livre_id, categorie_id) [pk]
+  }
+}
+
+Table exemplaire {
+  id bigint [primary key]
+  date_acquisition date
+  reference varchar(255) [not null, unique]
+  livre_id bigint
+}
+
+Table type_abonnement {
+  id bigint [primary key]
+  code varchar(255) [not null, unique]
+  conditions varchar(255)
+  duree_mois integer
+  libelle varchar(255)
+  montant double
+}
+
+Table abonnement {
+  id bigint [primary key]
+  date_debut date
+  date_fin date
+  date_paiement date
+  montant_paye double
+  adherent_id bigint
+  type_abonnement_id bigint
+}
+
+Table configuration_quota {
+  id bigint [primary key]
+  date_configuration timestamp
+  duree_max_pret integer
+  libelle varchar(255)
+  quota_pret integer
+  quota_reservation integer
+  profil_id bigint
+}
+
+Table pret {
+  id bigint [primary key]
+  date_pret timestamp [not null]
+  date_retour_effectuer timestamp
+  date_retour_prevu timestamp [not null]
+  notes varchar(255)
+  type_pret varchar(255) [not null, note: "Must be 'domicile' or 'sur place'"]
+  adherent_id bigint [not null]
+  exemplaire_id bigint [not null]
+}
+
+Table prolongement_pret {
+  id bigint [primary key]
+  date_prolongement timestamp [not null]
+  date_retour_prevu timestamp [not null]
+  admin_id bigint
+  pret_id bigint [not null]
+}
+
+Table reservation {
+  id bigint [primary key]
+  date_expiration timestamp [not null]
+  date_reservation timestamp [not null]
+  date_souhaiter timestamp [not null]
+  adherent_id bigint [not null]
+  exemplaire_id bigint [not null]
+}
+
+Table notification {
+  id bigint [primary key]
+  date_creation timestamp
+  est_lu boolean [not null]
+  message varchar(255)
+  pret_id bigint
+  reservation_id bigint
+  utilisateur_id bigint
+}
+
+Table type_penalite {
+  id bigint [primary key]
+  code varchar(255) [not null, unique]
+  description varchar(255)
+  duree_jours integer
+  retard_jours integer
+}
+
+Table penalite {
+  id bigint [primary key]
+  date_annulation timestamp
+  date_application date
+  date_fin date
+  notes varchar(255)
+  adherent_id bigint
+  admin_id bigint
+  type_penalite_id bigint
+}
+
+Table feries {
+  id bigint [primary key]
+  date_creation timestamp
+  jour smallint
+  mois smallint
+  description varchar(255)
+  duree_jours integer
+  nom_evenement varchar(255)
+}
+
+Table suivi_feries {
+  id bigint [primary key]
+  annee integer
+  date_valide timestamp
+  description varchar(255)
+  ferie_id bigint
+}
+
+Table reparation {
+  id bigint [primary key]
+  cout double
+  date_debut date
+  date_fin_prevue date
+  date_fin_reelle date
+  description varchar(255)
+  technicien varchar(255)
+  exemplaire_id bigint
+}
+
+Table statut_exemplaire {
+  id bigint [primary key]
+  date_changement timestamp
+  notes varchar(255)
+  statut integer
+  admin_id bigint
+  exemplaire_id bigint
+  pret_id bigint
+  reservation_id bigint
+}
+
+Table validation {
+  id bigint [primary key]
+  date timestamp [not null]
+  validation_status boolean [not null]
+  admin_id bigint [not null]
+  pret_id bigint
+  prolongement_id bigint
+  reservation_id bigint
+}
+
+// Définition des relations
+Ref: adherent.id > utilisateur.id
+Ref: adherent.profil_id > profil.id
+Ref: personnel.id > utilisateur.id
+Ref: livre.auteur_id > auteur.id
+Ref: livre.editeur_id > editeur.id
+Ref: livre_categorie.livre_id > livre.id
+Ref: livre_categorie.categorie_id > categorie.id
+Ref: exemplaire.livre_id > livre.id
+Ref: abonnement.adherent_id > adherent.id
+Ref: abonnement.type_abonnement_id > type_abonnement.id
+Ref: configuration_quota.profil_id > profil.id
+Ref: pret.adherent_id > adherent.id
+Ref: pret.exemplaire_id > exemplaire.id
+Ref: prolongement_pret.admin_id > personnel.id
+Ref: prolongement_pret.pret_id > pret.id
+Ref: reservation.adherent_id > adherent.id
+Ref: reservation.exemplaire_id > exemplaire.id
+Ref: notification.pret_id > pret.id
+Ref: notification.reservation_id > reservation.id
+Ref: notification.utilisateur_id > utilisateur.id
+Ref: penalite.adherent_id > adherent.id
+Ref: penalite.admin_id > personnel.id
+Ref: penalite.type_penalite_id > type_penalite.id
+Ref: suivi_feries.ferie_id > feries.id
+Ref: reparation.exemplaire_id > exemplaire.id
+Ref: statut_exemplaire.admin_id > personnel.id
+Ref: statut_exemplaire.exemplaire_id > exemplaire.id
+Ref: statut_exemplaire.pret_id > pret.id
+Ref: statut_exemplaire.reservation_id > reservation.id
+Ref: validation.admin_id > personnel.id
+Ref: validation.pret_id > pret.id
+Ref: validation.prolongement_id > prolongement_pret.id
+Ref: validation.reservation_id > reservation.id
+
+// Note pour la vue (non supportée directement en DBML, ajoutée comme commentaire)
+// Vue : exemplaire_statut_aujourdhui
+// SELECT e.id AS exemplaire_id,
+//        e.reference,
+//        l.titre AS livre,
+//        CASE WHEN EXISTS (SELECT 1 FROM pret p WHERE p.exemplaire_id = e.id AND p.date_retour_effectuer IS NULL)
+//             THEN 'EMPRUNTE' ELSE 'DISPONIBLE' END AS statut_aujourdhui
+// FROM exemplaire e LEFT JOIN livre l ON e.livre_id = l.id;

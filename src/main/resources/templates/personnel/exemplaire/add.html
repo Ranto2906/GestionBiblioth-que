@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Ajouter Exemplaire</title>
+    <!-- CSS (Bootstrap + Font Awesome) -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" th:href="@{/css/personnel.css}">
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Sidebar -->
+            <div class="col-md-3 col-lg-2 p-0">
+               <div th:insert="~{fragments/personnel-sidebar :: personnel-sidebar}"></div>
+            </div>
+            
+            <!-- Contenu principal -->
+            <div class="col-md-9 col-lg-10 main-content">
+                <!-- Simple Header avec Logo -->
+                <div class="simple-header fade-in">
+                    <div class="logo">
+                        <i class="fas fa-copy"></i>
+                    </div>
+                    <div>
+                        <h1>Ajouter un Exemplaire</h1>
+                        <p class="mb-0">Gestion des exemplaires</p>
+                    </div>
+                </div>
+
+                <!-- Alertes -->
+                <div th:if="${success}" class="alert alert-success alert-dismissible fade show" role="alert">
+                    <i class="fas fa-check-circle me-2"></i>
+                    <span th:text="${success}"></span>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+                
+                <div th:if="${error}" class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <i class="fas fa-exclamation-triangle me-2"></i>
+                    <span th:text="${error}"></span>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+
+                <!-- Information sur le statut par défaut -->
+                <div class="content-wrapper fade-in mb-4">
+                    <div class="alert alert-info" role="alert">
+                        <h6><i class="fas fa-info-circle me-2"></i>Information</h6>
+                        <p class="mb-0">
+                            <strong>Statut par défaut :</strong> Tous les nouveaux exemplaires seront automatiquement 
+                            marqués comme <span class="badge bg-success">Disponible</span> lors de leur création.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Formulaire -->
+                <div class="content-wrapper fade-in">
+                    <div class="card border-0 shadow-sm">
+                        <div class="card-header bg-primary text-white">
+                            <h5 class="mb-0">
+                                <i class="fas fa-plus me-2"></i>Nouvel exemplaire
+                            </h5>
+                        </div>
+                        <div class="card-body">
+                            <form th:action="@{/personnel/exemplaire/add}" method="post" class="row g-3">
+                                <div class="col-md-6">
+                                    <label for="livreId" class="form-label">
+                                        <i class="fas fa-book me-1"></i>Livre <span class="text-danger">*</span>
+                                    </label>
+                                    <select class="form-select" id="livreId" name="livreId" required>
+                                        <option value="">Sélectionner un livre</option>
+                                        <option th:each="livre : ${livres}" 
+                                                th:value="${livre.id}" 
+                                                th:text="${livre.titre + ' - ' + livre.auteur.nom + ' ' + livre.auteur.prenom}">
+                                        </option>
+                                    </select>
+                                    <div class="form-text">Choisissez le livre auquel cet exemplaire appartient</div>
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="reference" class="form-label">
+                                        <i class="fas fa-barcode me-1"></i>Référence <span class="text-danger">*</span>
+                                    </label>
+                                    <input type="text" class="form-control" id="reference" name="reference" 
+                                           required placeholder="Ex: HP1-004">
+                                    <div class="form-text">Code unique d'identification de l'exemplaire</div>
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="dateAcquisition" class="form-label">
+                                        <i class="fas fa-calendar me-1"></i>Date d'acquisition
+                                    </label>
+                                    <input type="date" class="form-control" id="dateAcquisition" name="dateAcquisition">
+                                    <div class="form-text">Date à laquelle l'exemplaire a été acquis par la bibliothèque</div>
+                                </div>
+                                <div class="col-12">
+                                    <hr>
+                                    <div class="d-flex justify-content-between">
+                                        <a href="/personnel/exemplaire/list" class="btn btn-secondary">
+                                            <i class="fas fa-arrow-left me-2"></i>Retour à la liste
+                                        </a>
+                                        <button type="submit" class="btn btn-primary">
+                                            <i class="fas fa-plus me-2"></i>Ajouter l'exemplaire
+                                        </button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- JS Bootstrap -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html> 
